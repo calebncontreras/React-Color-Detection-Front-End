@@ -1,0 +1,8 @@
+.color-detection {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+}
+.palette-and-buttons {
+    /* display: flex; */
+}
