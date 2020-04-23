@@ -3,6 +3,17 @@
     flex-direction: row;
     padding: 1rem;
 }
-.palette-and-buttons {
-    /* display: flex; */
+
+/* .img-view-btn {
+    height: 40px;
+    max-width: 200px;
+    background: #ff7f50;
+} */
+/* .img-view-btn:hover {
+    opacity: .9;
+} */
+
+.container {
+    display: flex;
+    flex-direction: column;
 }

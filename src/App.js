@@ -5,6 +5,9 @@ import Logo from "./components/Logo/Logo";
 import Navigation from "./components/Navigation/Navigation";
 import ImageInputForm from "./components/ImageInputForm/ImageInputForm";
 import ColorDetection from "./components/ColorDetection/ColorDetection";
+import SignIn from "./components/SignIn/SignIn";
+import Register from "./components/Register/Register";
+
 import "./App.css";
 
 //You must add your own API key here from Clarifai.
@@ -29,18 +32,33 @@ class App extends React.Component {
     super();
     this.state = {
       input: "",
-      ImageURL: "",
+      imageURL: "",
+      colors: [],
+      loaded: false,
+      isSignedIn: false,
+      route: "signin",
     };
+    console.log("constructor");
   }
 
   onInputChange = (event) => this.setState({ input: event.target.value });
+
+  onRouteChange = (route) => {
+    if (route === "signout") {
+      this.setState({ isSignedIn: false });
+    } else if (route === "home") {
+      this.setState({ isSignedIn: true });
+    }
+    this.setState({ route: route });
+  };
 
   onSubmitForm = () => {
     this.setState({ imageURL: this.state.input });
     app.models
       .predict(Clarifai.COLOR_MODEL, this.state.input)
       .then((response) => {
-        this.createColorPallete(this.extractColorData(response));
+        this.extractColorData(response);
+        this.setState({ loaded: true });
       })
       .catch((error) => {
         console.log(error);
@@ -51,52 +69,49 @@ class App extends React.Component {
     // Debug
     // console.log(data);
     // console.log(data.outputs[0].data.colors);
+
     const colorsArr = data.outputs[0].data.colors.map((color) => {
       console.log(color);
       return color["w3c"];
     });
-    // console.log(colorsArr);
+    const color = colorsArr[0]["hex"];
+
+    this.setState({ primaryColor: color });
+    this.setState({
+      colors: colorsArr,
+    });
     return colorsArr;
   };
 
-  createColorPallete = (data) => {
-    const colorPallete = data.map((color) => {
-      const { hex, name } = color;
-      const elemStyle = {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: hex,
-        width: "200px",
-        height: "50px",
-        color: "white",
-      };
-      return (
-        <div
-          style={elemStyle}
-          className="color-element"
-        >{`${name}: ${hex}`}</div>
-      );
-    });
-
-    this.setState({
-      colorPallete: <div className="color-pallete">{colorPallete}</div>,
-    });
-  };
-
   render() {
-    const { input, imageURL, colorPallete } = this.state;
-    console.log(input);
+    const { imageURL, colors, primaryColor, isSignedIn, route } = this.state;
+    // const primaryColor = colorPallete[0]["hex"];
+    console.log("state:", this.state);
     return (
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
-        <Navigation />
-        <Logo />
-        <ImageInputForm
-          onInputChange={this.onInputChange}
-          onSubmitForm={this.onSubmitForm}
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
         />
-        <ColorDetection imageURL={imageURL} colorPallete={colorPallete} />
+        {route === "home" ? (
+          <div>
+            <Logo />
+            <ImageInputForm
+              onInputChange={this.onInputChange}
+              onSubmitForm={this.onSubmitForm}
+            />
+            <ColorDetection
+              colors={colors}
+              imageURL={imageURL}
+              primaryColor={primaryColor}
+            />
+          </div>
+        ) : route === "signin" ? (
+          <SignIn onRouteChange={this.onRouteChange} />
+        ) : (
+          <Register onRouteChange={this.onRouteChange} />
+        )}
       </div>
     );
   }
