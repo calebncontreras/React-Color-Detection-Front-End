@@ -12,7 +12,7 @@ import "./App.css";
 
 //You must add your own API key here from Clarifai.
 const app = new Clarifai.App({
-  apiKey: "f3ead08f7e894e55a0e723694069ef13",
+  apiKey: "72e02b44ed5943c4b2bc5e1cf6a80c4c",
 });
 
 const particlesOptions = {
@@ -27,24 +27,46 @@ const particlesOptions = {
   },
 };
 
+const initialState = {
+  input: "",
+  imageURL: "",
+  colors: [],
+  detectSuccess: false,
+  isSignedIn: false,
+  route: "signin",
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: "",
+  },
+};
+
 class App extends React.Component {
   constructor() {
     super();
-    this.state = {
-      input: "",
-      imageURL: "",
-      colors: [],
-      loaded: false,
-      isSignedIn: false,
-      route: "signin",
-    };
-    console.log("constructor");
+    this.state = initialState;
   }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined,
+      },
+    });
+    console.log(this.state.user);
+  };
 
   onInputChange = (event) => this.setState({ input: event.target.value });
 
   onRouteChange = (route) => {
     if (route === "signout") {
+      this.setState({ initialState });
       this.setState({ isSignedIn: false });
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
@@ -59,24 +81,23 @@ class App extends React.Component {
       .then((response) => {
         this.extractColorData(response);
         this.setState({ loaded: true });
+        this.onColorDetectSuccess();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  extractColorData = (data) => {
-    // Debug
-    // console.log(data);
-    // console.log(data.outputs[0].data.colors);
+  onColorDetectSuccess = () => {
+    this.setState({ detectSuccess: true });
+  };
 
+  extractColorData = (data) => {
     const colorsArr = data.outputs[0].data.colors.map((color) => {
       console.log(color);
       return color["w3c"];
     });
-    const color = colorsArr[0]["hex"];
 
-    this.setState({ primaryColor: color });
     this.setState({
       colors: colorsArr,
     });
@@ -84,9 +105,8 @@ class App extends React.Component {
   };
 
   render() {
-    const { imageURL, colors, primaryColor, isSignedIn, route } = this.state;
-    // const primaryColor = colorPallete[0]["hex"];
-    console.log("state:", this.state);
+    const { imageURL, colors, isSignedIn, route, detectSuccess } = this.state;
+
     return (
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
@@ -101,16 +121,19 @@ class App extends React.Component {
               onInputChange={this.onInputChange}
               onSubmitForm={this.onSubmitForm}
             />
-            <ColorDetection
-              colors={colors}
-              imageURL={imageURL}
-              primaryColor={primaryColor}
-            />
+            {detectSuccess === true ? (
+              <ColorDetection colors={colors} imageURL={imageURL} />
+            ) : (
+              <p className="pa4 f4">No Image Detected</p>
+            )}
           </div>
         ) : route === "signin" ? (
-          <SignIn onRouteChange={this.onRouteChange} />
+          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : (
-          <Register onRouteChange={this.onRouteChange} />
+          <Register
+            loadUser={this.loadUser}
+            onRouteChange={this.onRouteChange}
+          />
         )}
       </div>
     );
