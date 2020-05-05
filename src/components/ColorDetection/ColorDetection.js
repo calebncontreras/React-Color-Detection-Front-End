@@ -1,7 +1,7 @@
 import React from "react";
 import "./ColorDetection.css";
 import ColorPallet from "../ColorPallet/ColorPallet";
-const ColorDetection = ({ imageURL, colors, primaryColor }) => {
+const ColorDetection = ({ imageURL, colors }) => {
   return (
     <div className="center">
       <div className="absolute mt2 color-detection">

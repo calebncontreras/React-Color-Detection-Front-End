@@ -7,6 +7,7 @@ import ImageInputForm from "./components/ImageInputForm/ImageInputForm";
 import ColorDetection from "./components/ColorDetection/ColorDetection";
 import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
+import Rank from "./components/Rank/Rank";
 
 import "./App.css";
 
@@ -106,7 +107,7 @@ class App extends React.Component {
 
   render() {
     const { imageURL, colors, isSignedIn, route, detectSuccess } = this.state;
-
+    const { entries, name } = this.state.user;
     return (
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
@@ -117,6 +118,7 @@ class App extends React.Component {
         {route === "home" ? (
           <div>
             <Logo />
+            <Rank name={name} entries={entries} />
             <ImageInputForm
               onInputChange={this.onInputChange}
               onSubmitForm={this.onSubmitForm}

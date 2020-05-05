@@ -1,7 +1,10 @@
 .color-detection {
     display: flex;
-    flex-direction: row;
-    padding: 1rem;
+    align-items: flex-start;
+    max-height: 300px;
+    /* justify-content: flex-end; */
+    /* flex-direction: row;
+    padding: 1rem; */
 }
 
 /* .img-view-btn {
@@ -16,4 +19,5 @@
 .container {
     display: flex;
     flex-direction: column;
+    
 }
