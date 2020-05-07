@@ -1,5 +1,12 @@
 .App {
   text-align: center;
+  width: 100%;
+}
+
+.body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .center {
@@ -7,6 +14,9 @@
   justify-content: center;
 }
 
+.fixed {
+  display: fixed;
+}
 .particles {
   position: fixed;
   top: 0;

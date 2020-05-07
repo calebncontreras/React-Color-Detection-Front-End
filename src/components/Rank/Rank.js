@@ -2,9 +2,9 @@ import React from "react";
 
 const Rank = ({ name, entries }) => {
   return (
-    <div>
-      <p className="f4 code --washed-blue bb w-third tc">
-        {name} your score is {entries} entries.
+    <div className="center">
+      <p className=" pa3 f4 code --washed-blue bb">
+        {name} your score is {entries}.
       </p>
     </div>
   );

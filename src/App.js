@@ -7,6 +7,7 @@ import ImageInputForm from "./components/ImageInputForm/ImageInputForm";
 import ColorDetection from "./components/ColorDetection/ColorDetection";
 import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
+import Footer from "./components/Footer/Footer";
 import Rank from "./components/Rank/Rank";
 
 import "./App.css";
@@ -89,8 +90,26 @@ class App extends React.Component {
       });
   };
 
+  IncrementScore = () => {
+    fetch("http://localhost:3000/detectSuccess", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: this.state.user.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
+  };
+
   onColorDetectSuccess = () => {
     this.setState({ detectSuccess: true });
+    this.IncrementScore();
   };
 
   extractColorData = (data) => {
@@ -116,9 +135,9 @@ class App extends React.Component {
           onRouteChange={this.onRouteChange}
         />
         {route === "home" ? (
-          <div>
+          <div className="body">
             <Logo />
-            <Rank name={name} entries={entries} />
+            <Rank className="center" name={name} entries={entries} />
             <ImageInputForm
               onInputChange={this.onInputChange}
               onSubmitForm={this.onSubmitForm}
@@ -126,8 +145,9 @@ class App extends React.Component {
             {detectSuccess === true ? (
               <ColorDetection colors={colors} imageURL={imageURL} />
             ) : (
-              <p className="pa4 f4">No Image Detected</p>
+              <p className="pa5 f4">No Image Detected</p>
             )}
+            <Footer />
           </div>
         ) : route === "signin" ? (
           <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
