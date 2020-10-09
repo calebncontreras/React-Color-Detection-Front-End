@@ -1,11 +1,11 @@
-.color-detection {
+/* .color-detection {
     display: flex;
     align-items: flex-start;
-    max-height: 300px;
+    max-height: 300px; */
     /* justify-content: flex-end; */
     /* flex-direction: row;
     padding: 1rem; */
-}
+/* } */
 
 /* .img-view-btn {
     height: 40px;
@@ -16,8 +16,8 @@
     opacity: .9;
 } */
 
-.container {
+/* .container {
     display: flex;
     flex-direction: column;
     
-}
+} */

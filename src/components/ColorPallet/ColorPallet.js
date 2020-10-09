@@ -7,8 +7,8 @@ class ColorPallete extends React.Component {
 
     return (
       <div className="color-col">
-        {colors.map((color) => {
-          return <ColorRow {...color} />;
+        {colors.map((color), () => {
+          return <ColorRow />
         })}
       </div>
     );

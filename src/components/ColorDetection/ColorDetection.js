@@ -1,28 +1,42 @@
 import React from "react";
 import "./ColorDetection.css";
-import ColorPallet from "../ColorPallet/ColorPallet";
-const ColorDetection = ({ imageURL, colors }) => {
+import ColorRow from "../ColorRow/ColorRow.js";
+
+
+const ColorDetection = ({ imageURL, colors, deleteResults }) => {
   return (
-    <div className="center">
-      <div className="absolute mt2 color-detection">
+      <div className="w-100 pa4 db flex flex-row justify-center">
+        
         <img
           id="inputimage"
           alt=""
           src={imageURL}
-          width="500px"
-          height="auto"
+          height="500px"
+          className="mw-100 ma2"
         />
-        <div className="container fl w-40 ba br2 bw2 b--black-60">
-          <ColorPallet colors={colors} />
-          <button className="button link f4 pa2 dim white bg-light-purple">
-            Save in Library
-          </button>
-          <button className="button link f4 pa2 dim white bg-light-purple ">
-            Preview Colors
-          </button>
+        
+        <div className="mw-50 ma2 flex flex-row" style={{height: '500px'}}>
+          
+          <div className="color-col w-100">
+              {colors.map((color) => {
+                return <ColorRow {...color} />;
+              })}
+          </div>
+
+          <div id="menu-buttons" className="flex flex-column">
+            <button className="button link ma2 f5 pa2 dim white bg-light-purple">
+              Save in Library
+            </button>
+            <button className="button link ma2 f5 pa2 dim white bg-light-purple ">
+              Preview Colors
+            </button>
+            <button onClick={deleteResults} className="button link ma2 f5 pa2 dim white bg-red ">
+              Discard
+            </button>
+          </div>
+        
         </div>
       </div>
-    </div>
   );
 };
 
