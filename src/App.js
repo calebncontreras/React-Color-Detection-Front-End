@@ -72,9 +72,8 @@ class App extends React.Component {
 
     onSubmitForm = () => {
         this.setState({ imageURL: this.state.input })
-        // .predict(Clarifai.COLOR_MODEL, this.state.input)
         console.log(this.state.imageURL)
-        fetch('http://localhost:3000/image', {
+        fetch(process.env.API_URL + 'image', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -95,7 +94,7 @@ class App extends React.Component {
     }
 
     IncrementScore = () => {
-        fetch('http://localhost:3000/imageSuccess', {
+        fetch(process.env.API_URL + 'imageSuccess', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
