@@ -73,7 +73,7 @@ class App extends React.Component {
     onSubmitForm = () => {
         this.setState({ imageURL: this.state.input })
         console.log(this.state.imageURL)
-        fetch(process.env.API_URL + 'image', {
+        fetch(`${process.env.API_URL}image`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -94,7 +94,7 @@ class App extends React.Component {
     }
 
     IncrementScore = () => {
-        fetch(process.env.API_URL + 'imageSuccess', {
+        fetch(`${process.env.API_URL}imageSuccess`, {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
